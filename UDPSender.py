@@ -17,3 +17,8 @@ def create_udp_socket(is_broadcast):
     if is_broadcast is True:
         udp_socket.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
     return udp_socket
+
+
+if __name__ == '__main__':
+    hello = "HELLO#,#NODE\n"
+    send_data_with_broadcast(20001, hello.encode("utf-8"))

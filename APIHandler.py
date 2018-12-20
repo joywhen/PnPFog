@@ -83,9 +83,8 @@ def new_task(data, port, ip):
 
 def hello(data, port, ip):
     print(data) # 唯一编号
-    # 要去查一下所有节点有没有在跑的任务
-
-
-
-    common_return_for_file("HELLO#,#", ip)
+    if data is not "NODE":
+        # 要去查一下所有节点有没有在跑的任务
+        print("not self")
+        common_return_for_file("HELLO#,#", ip)
 
