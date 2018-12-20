@@ -41,5 +41,4 @@ while True:
     thread.start()
 
 
-
 udp_socket.close()

@@ -35,7 +35,7 @@ def send_back(new_socket, destaddr):
 
 
 def list_files():
-    list = os.listdir("/home/zhouxi/")
+    list = os.listdir("/home/pi/")
     return str(json.dumps(list))
 
 

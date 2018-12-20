@@ -1,4 +1,3 @@
-import socket
 import UDPSender
 import json
 
@@ -18,7 +17,7 @@ def new_task(data, port, ip):
     print(uuid)
     print(type_)
     print(url)
-    # 提交给服务器
+    # 提交给node
 
     # 然后返回OK
     
