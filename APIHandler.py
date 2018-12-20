@@ -1,5 +1,5 @@
 import UDPSender
-import json
+import socket
 import socket_echo_client_tcp
 import FileUtil
 import os
@@ -40,6 +40,12 @@ def get_status_from_file(full_path):
 
 
 def common_return_for_file(req_api, ip):
+    count, object_list = get_task_count_and_task_obj_list(req_api, ip)
+    json_list = json.dumps(object_list, cls=AdvancedJSONEncoder)
+    final_str = req_api + str(json_list) + "\n"
+    UDPSender.send_data(ip, device_udp_socket_port, bytes(final_str, 'utf-8'))
+
+def get_task_count_and_task_obj_list(req_api, ip):
     now_path = "./" + work_dir + "/"
     FileUtil.check_path_and_createfolder(now_path)
     now_dir = os.listdir(now_path)
@@ -52,9 +58,9 @@ def common_return_for_file(req_api, ip):
         new_obj.name = dir_name
         new_obj.status = get_status_from_file(full_dir_name)
         object_list.append(new_obj)
-    json_list = json.dumps(object_list, cls=AdvancedJSONEncoder)
-    final_str = req_api + str(json_list) + "\n"
-    UDPSender.send_data(ip, device_udp_socket_port, bytes(final_str, 'utf-8'))
+    count = len(object_list)
+    return count, object_list
+
 
 
 def get_s(data, port, ip):
@@ -81,10 +87,35 @@ def new_task(data, port, ip):
     UDPSender.send_data(ip, device_udp_socket_port, bytes(ok_str, 'utf-8'))
 
 
+def get_host_ip():
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(('8.8.8.8', 80))
+        ip = s.getsockname()[0]
+    finally:
+        s.close()
+
+    return ip
+
+
 def hello(data, port, ip):
     print(data) # 唯一编号
-    if data is not "NODE":
-        # 要去查一下所有节点有没有在跑的任务
+    if str(data).startswith("NODE"):
+        # 查找是不是自己给自己发送的
+        my_ip = get_host_ip()
+        if my_ip != ip:
+            # 不是给自己发送的
+            count, object_list = get_task_count_and_task_obj_list("HELLO#,#", ip)
+
+
+
+        print("ip:"+ip +"self:" + my_ip)
+
+        # 自己节点上有的任务
+        print("self")
+    else:
         print("not self")
+        # 要去查一下所有节点有没有在跑的任务
+
         common_return_for_file("HELLO#,#", ip)
 

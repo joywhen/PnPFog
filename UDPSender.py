@@ -20,5 +20,5 @@ def create_udp_socket(is_broadcast):
 
 
 if __name__ == '__main__':
-    hello = "HELLO#,#NODE\n"
+    hello = "HELLO#,#NODE,192.168.2.1\n"
     send_data_with_broadcast(20001, hello.encode("utf-8"))
