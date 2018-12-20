@@ -2,6 +2,10 @@ import socket
 import threading
 import APIHandler
 
+buffer_size = 1024
+udp_socket_host = ''  # listen all ip
+udp_socket_port = 20001  # port
+
 
 def send_back(udp_data, udp_address):
     api_data_all = str(udp_data.decode("utf-8"))
@@ -30,22 +34,17 @@ def send_back(udp_data, udp_address):
     elif api_name == "HELLO2":  # to hello
         print("to hello NODE handle")
         APIHandler.hello2(api_data, udp_port, udp_ip_address)
-
     elif api_name == "QQQQQ":
         print("aaaaaaaa")
 
 
-buffer_size = 1024
-udp_socket_host = ''  # listen all ip
-udp_socket_port = 20001  # port
-udp_socket_address = (udp_socket_host, udp_socket_port)
-udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-udp_socket.setblocking(1)
-udp_socket.bind(udp_socket_address)
-while True:
-    udp_data, udp_address = udp_socket.recvfrom(buffer_size)
-    thread = threading.Thread(target=send_back, args=(udp_data, udp_address))
-    thread.start()
-
-
-udp_socket.close()
+if __name__ == '__main__':
+    udp_socket_address = (udp_socket_host, udp_socket_port)
+    udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    udp_socket.setblocking(1)
+    udp_socket.bind(udp_socket_address)
+    while True:
+        udp_data, udp_address = udp_socket.recvfrom(buffer_size)
+        thread = threading.Thread(target=send_back, args=(udp_data, udp_address))
+        thread.start()
+    udp_socket.close()

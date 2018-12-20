@@ -6,7 +6,6 @@ import os
 import json
 import UDPServer
 
-
 device_udp_socket_port = 21001
 
 work_dir = socket_echo_client_tcp.WORKDIR
