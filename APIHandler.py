@@ -4,6 +4,7 @@ import socket_echo_client_tcp
 import FileUtil
 import os
 import json
+import UDPServer
 
 
 device_udp_socket_port = 21001
@@ -42,8 +43,9 @@ def get_status_from_file(full_path):
 def common_return_for_file(req_api, ip):
     count, object_list = get_task_count_and_task_obj_list(req_api, ip)
     json_list = json.dumps(object_list, cls=AdvancedJSONEncoder)
-    final_str = req_api + str(json_list) + "\n"
+    final_str = req_api + str(json_list) + "/,/" + get_host_ip() + "\n"
     UDPSender.send_data(ip, device_udp_socket_port, bytes(final_str, 'utf-8'))
+
 
 def get_task_count_and_task_obj_list(req_api, ip):
     now_path = "./" + work_dir + "/"
@@ -98,6 +100,10 @@ def get_host_ip():
     return ip
 
 
+def hello2(data, port, ip):
+    print(data) # 唯一编号
+
+
 def hello(data, port, ip):
     print(data) # 唯一编号
     if str(data).startswith("NODE"):
@@ -105,17 +111,18 @@ def hello(data, port, ip):
         my_ip = get_host_ip()
         if my_ip != ip:
             # 不是给自己发送的
+            # 获取自己的节点的任务
             count, object_list = get_task_count_and_task_obj_list("HELLO#,#", ip)
-
-
-
-        print("ip:"+ip +"self:" + my_ip)
-
-        # 自己节点上有的任务
-        print("self")
+            json_list = json.dumps(object_list, cls=AdvancedJSONEncoder)
+            final_str = "HELLO2#,#" + str(json_list) + "/,/" + get_host_ip() + "\n"
+            # 发送回去老的节点那里
+            print("发回去:"+ip)
+            UDPSender.send_data(ip, UDPServer.udp_socket_port)
+            print("ip:"+ip + "self:" + my_ip)
     else:
-        print("not self")
+        print("not self:" + ip)
         # 要去查一下所有节点有没有在跑的任务
-
+        hello_new = "HELLO#,#NODE," + ip + "\n"
+        UDPSender.send_data_with_broadcast(UDPServer.udp_socket_port, hello_new.encode("utf-8"))
         common_return_for_file("HELLO#,#", ip)
 

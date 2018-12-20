@@ -27,6 +27,9 @@ def send_back(udp_data, udp_address):
     elif api_name == "S":
         print("to S")
         APIHandler.get_s(api_data, udp_port, udp_ip_address)
+    if api_name == "HELLO2":  # to hello
+        print("to hello NODE handle")
+        APIHandler.hello2(api_data, udp_port, udp_ip_address)
 
     elif api_name == "QQQQQ":
         print("aaaaaaaa")
