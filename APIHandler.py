@@ -64,7 +64,6 @@ def get_task_count_and_task_obj_list(req_api, ip):
     return count, object_list
 
 
-
 def get_s(data, port, ip):
     common_return_for_file("S#,#", ip)
 
