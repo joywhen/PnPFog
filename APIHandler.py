@@ -1,8 +1,22 @@
 import UDPSender
 import json
+import socket_echo_client_tcp
+import FileUtil
+import os
 
 
 device_udp_socket_port = 21001
+
+work_dir = socket_echo_client_tcp.WORKDIR
+
+
+def get_s(data, port, ip):
+    now_path = "./" + work_dir + "/"
+    FileUtil.check_path_and_createfolder(now_path)
+    now_dir = os.listdir(now_path)
+
+
+    print(now_dir)
 
 
 def new_task(data, port, ip):

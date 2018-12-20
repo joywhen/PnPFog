@@ -6,6 +6,7 @@ import struct
 import requests
 import time
 import subprocess
+import FileUtil
 
 TCP_IP = '127.0.0.1'
 TCP_PORT = 5005
@@ -26,8 +27,8 @@ def download_from_server(url):
     # get time(ms) and create folder
     nowTime = int(round(time.time() * 1000))
     nowPath = "./" + WORKDIR + "/" + str(nowTime)
-    check_path_and_createfolder(nowPath)
-    check_path_and_createfolder(nowPath + "/output")
+    FileUtil.check_path_and_createfolder(nowPath)
+    FileUtil.check_path_and_createfolder(nowPath + "/output")
     nowStatusPath = nowPath + "/status.txt"
     # check_path_and_createfolder(nowStatusPath)
 
@@ -89,7 +90,7 @@ def socket_client(nowPath):
         filepatharr = []
         # path = './output/'
         path = nowPath + "/output/"
-        check_path_and_createfolder(path)
+        FileUtil.check_path_and_createfolder(path)
         dirs = os.listdir(path)
         for file in dirs:
             if os.path.splitext(file)[1] == '.aac':
@@ -141,12 +142,6 @@ def socket_client(nowPath):
         break
 
 
-def check_path_and_createfolder(path):
-    if not os.path.exists(path):
-        os.makedirs(path)
-        print("mkdir success")
-    else:
-        print("There is the path")
 
 
 if __name__ == '__main__':

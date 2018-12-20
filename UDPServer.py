@@ -24,6 +24,10 @@ def send_back(udp_data, udp_address):
     elif api_name == "NT":  # new task
         print("to new task handle")
         APIHandler.new_task(api_data, udp_port, udp_ip_address)
+    elif api_name == "S":
+        print("to S")
+        APIHandler.get_s(api_data, udp_port, udp_ip_address)
+
     elif api_name == "QQQQQ":
         print("aaaaaaaa")
 
