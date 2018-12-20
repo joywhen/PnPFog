@@ -79,11 +79,9 @@ def new_task(data, port, ip):
     print(uuid)
     print(type_)
     print(url)
-    # 提交给node
 
     #
     ok_str = "NT#,#" + "OK" + "\n"
-    # 然后返回OK
     UDPSender.send_data(ip, device_udp_socket_port, bytes(ok_str, 'utf-8'))
 
 
@@ -99,27 +97,22 @@ def get_host_ip():
 
 
 def hello2(data, port, ip):
-    print(data) # 唯一编号
+    print(data)
 
 
 def hello(data, port, ip):
-    print(data) # 唯一编号
+    print(data)
     if str(data).startswith("NODE"):
-        # 查找是不是自己给自己发送的
         my_ip = get_host_ip()
         if my_ip != ip:
-            # 不是给自己发送的
-            # 获取自己的节点的任务
             count, object_list = get_task_count_and_task_obj_list("HELLO#,#", ip)
             json_list = json.dumps(object_list, cls=AdvancedJSONEncoder)
             final_str = "HELLO2#,#" + str(json_list) + "/,/" + get_host_ip() + "\n"
-            # 发送回去老的节点那里
             print("发回去:"+ip)
-            UDPSender.send_data(ip, UDPServer.udp_socket_port)
+            UDPSender.send_data(ip, UDPServer.udp_socket_port,final_str)
             print("ip:"+ip + "self:" + my_ip)
     else:
         print("not self:" + ip)
-        # 要去查一下所有节点有没有在跑的任务
         hello_new = "HELLO#,#NODE," + ip + "\n"
         UDPSender.send_data_with_broadcast(UDPServer.udp_socket_port, hello_new.encode("utf-8"))
         common_return_for_file("HELLO#,#", ip)
